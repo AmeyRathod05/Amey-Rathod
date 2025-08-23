@@ -1,1 +1,68 @@
-{"name":"t:sections.header.name","type":"header","sections":{"announcement-bar":{"type":"announcement-bar","blocks":{"announcement-bar-0":{"type":"announcement","settings":{"text":"Welcome to our store","link":""}}},"block_order":["announcement-bar-0"],"settings":{"auto_rotate":false,"change_slides_speed":5,"color_scheme":"scheme-1","show_line_separator":true,"show_social":false,"enable_country_selector":false,"enable_language_selector":false}},"header":{"type":"header","settings":{"logo_position":"middle-left","mobile_logo_position":"center","menu":"main-menu","menu_type_desktop":"dropdown","sticky_header_type":"on-scroll-up","show_line_separator":true,"color_scheme":"scheme-1","menu_color_scheme":"scheme-1","enable_country_selector":true,"enable_language_selector":true,"enable_customer_avatar":true,"margin_bottom":0,"padding_top":20,"padding_bottom":20}}},"order":["announcement-bar","header"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.header.name",
+  "type": "header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "disabled": true,
+      "settings": {
+        "logo_position": "middle-left",
+        "mobile_logo_position": "center",
+        "menu": "main-menu",
+        "menu_type_desktop": "dropdown",
+        "sticky_header_type": "on-scroll-up",
+        "show_line_separator": true,
+        "color_scheme": "scheme-1",
+        "menu_color_scheme": "scheme-1",
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "enable_customer_avatar": true,
+        "margin_bottom": 0,
+        "padding_top": 20,
+        "padding_bottom": 20
+      }
+    },
+    "header_one_wzKpB6": {
+      "type": "header-one",
+      "name": "header-one",
+      "settings": {
+        "logo": "shopify://shop_images/Group_1000007858.png",
+        "logo_text": "Your Logo",
+        "logo_link": "/",
+        "logo_alt": "",
+        "logo_width": 150,
+        "logo_height": 82,
+        "center_text": "Find the ideal gift for your loved ones",
+        "mobile_button_bg_color": "#f1ff61",
+        "mobile_button_text_color": "#000000",
+        "mobile_button_hover_bg": "#333333",
+        "desktop_button_bg_color": "#f1ff61",
+        "desktop_button_text_color": "#000000",
+        "desktop_button_hover_bg": "#333333",
+        "button_label": "Choose Gift",
+        "button_link": "",
+        "button_new_tab": false,
+        "background_color": "#ffffff",
+        "text_color": "#333333",
+        "padding_vertical": 1,
+        "padding_horizontal": 2,
+        "mobile_logo_height": 30,
+        "show_mobile_divider": true,
+        "divider_color": "#eeeeee"
+      }
+    }
+  },
+  "order": [
+    "header",
+    "header_one_wzKpB6"
+  ]
+}
