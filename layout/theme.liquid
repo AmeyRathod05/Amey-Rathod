@@ -372,5 +372,9 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+
+    {% comment %} Product Popup Snippet {% endcomment %}
+    {% render 'product-popup' %}
+    {{ 'minimal-popup.js' | asset_url | script_tag }}
   </body>
 </html>

@@ -1,0 +1,154 @@
+{{ 'minimal-product-grid.css' | asset_url | stylesheet_tag }}
+{{ 'minimal-popup.css' | asset_url | stylesheet_tag }}
+
+<!-- Include the product popup snippet -->
+{% render 'product-popup' %}
+
+{{ 'minimal-popup.js' | asset_url | script_tag }}
+
+<div class="minimal-product-grid page-width">
+  {% if section.settings.title != blank %}
+    <h2 class="section-heading">{{ section.settings.title }}</h2>
+  {% endif %}
+  
+  <div class="minimal-grid">
+    {% assign collection = section.settings.collection %}
+    {% if collection == blank %}
+      {% assign collection = collections['all'] %}
+    {% else %}
+      {% assign collection = collections[collection] %}
+    {% endif %}
+    
+    {% if collection.products_count > 0 %}
+      {% for product in collection.products limit: section.settings.products_to_show %}
+      <div class="product-item">
+        <!-- Quick View Button -->
+        <button class="quick-view quick-view-icon" 
+                data-product-handle="{{ product.handle }}" 
+                aria-label="{{ 'products.product.quick_view' | t: title: product.title }}"
+                style="position: absolute; top: 10px; right: 10px; z-index: 2; background: rgba(0,0,0,0.7); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; padding: 0;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 3.33333V12.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M3.33333 8H12.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        
+        {% if product.featured_image %}
+          <img 
+            src="{{ product.featured_image | img_url: '600x' }}" 
+            alt="{{ product.featured_image.alt | escape }}"
+            class="product-image"
+            loading="lazy"
+            width="600"
+            height="{{ 600 | divided_by: product.featured_image.aspect_ratio | ceil }}"
+          >
+        {% endif %}
+        
+        <div class="product-overlay">
+          <h3 class="product-title">{{ product.title }}</h3>
+          <div class="product-price">{{ product.price | money }}</div>
+          
+          {% if product.variants.size > 1 %}
+            <select class="variant-selector" id="variant-selector-{{ product.id }}">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}">
+                  {{ variant.title }} - {{ variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          {% endif %}
+          
+          <button class="add-to-cart-btn" data-product-id="{{ product.variants.first.id }}">
+            {{ 'products.product.add_to_cart' | t }}
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p>No products found in the selected collection.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Include Product Popup Snippet -->
+{% render 'product-popup' %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Add any product grid specific JavaScript here
+  // All popup functionality has been moved to product-popup.liquid
+  
+  // Add to cart functionality for main grid
+  document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+    button.addEventListener('click', async function(e) {
+      e.preventDefault();
+      const variantId = this.dataset.variantId || this.dataset.productId;
+      
+      if (!variantId) {
+        console.error('No variant ID found');
+        return;
+      }
+      
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: [{
+              id: variantId,
+              quantity: 1,
+            }],
+          }),
+        });
+        
+        if (response.ok) {
+          // Optional: Show success message or update cart count
+          console.log('Product added to cart');
+        } else {
+          console.error('Error adding to cart:', await response.text());
+        }
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+      }
+    });
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Minimal Product Grid",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6,
+      "label": "Maximum products to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Minimal Product Grid",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
