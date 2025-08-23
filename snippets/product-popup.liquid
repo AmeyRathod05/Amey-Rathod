@@ -1,0 +1,37 @@
+<div id="minimal-product-popup" class="minimal-product-popup">
+  <div class="minimal-popup-overlay"></div>
+  <div class="minimal-popup-content">
+    <button type="button" class="minimal-popup-close" aria-label="Close">
+      &times;
+    </button>
+    
+    <div class="minimal-popup-grid">
+      <div class="minimal-popup-image">
+        <img id="popup-product-image" src="" alt="" loading="lazy" class="product-popup-image">
+      </div>
+      
+      <div class="minimal-popup-details">
+        <h3 id="popup-product-title" class="minimal-product-title"></h3>
+        <div id="popup-product-price" class="minimal-product-price"></div>
+        
+        <div id="popup-product-description" class="minimal-product-description"></div>
+        
+        <div id="popup-variant-selectors" class="minimal-variants-container">
+        </div>
+        
+        <form id="popup-add-to-cart-form" class="minimal-add-to-cart-form">
+          <div class="color-selector">
+            <label>Color</label>
+            <div class="color-options">
+            </div>
+          </div>
+          
+          <button type="submit" class="minimal-add-to-cart-btn">
+            Add to Cart
+          </button>
+          <input type="hidden" id="selected-variant-id" name="id" value="">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
