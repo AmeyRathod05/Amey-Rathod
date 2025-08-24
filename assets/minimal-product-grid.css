@@ -158,6 +158,9 @@
   transition: background 0.3s ease;
 }
 
+.minimal-product-grid .section-heading {
+  padding-left: 10px;
+}
 .popup-actions button:hover {
   background: #333;
 }

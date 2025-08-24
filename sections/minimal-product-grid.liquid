@@ -8,7 +8,7 @@
 
 <div class="minimal-product-grid page-width">
   {% if section.settings.title != blank %}
-    <h2 class="section-heading">{{ section.settings.title }}</h2>
+    <h2 class="section-heading" style="font-size: {{ section.settings.heading_size }}px">{{ section.settings.title }}</h2>
   {% endif %}
   
   <div class="minimal-grid">
@@ -128,6 +128,16 @@ document.addEventListener('DOMContentLoaded', function() {
       "id": "title",
       "label": "Heading",
       "default": "Featured Products"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 16,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Heading Font Size",
+      "default": 24
     },
     {
       "id": "collection",

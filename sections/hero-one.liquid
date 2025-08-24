@@ -28,11 +28,11 @@
         {% endif %} 
         
         {% if section.settings.subheading_1 != blank %}
-          <p class="hero-one__subheading-1">{{ section.settings.subheading_1 }}</p>
+          <p class="hero-one__subheading-1 desktop-only">{{ section.settings.subheading_1 }}</p>
         {% endif %}
         
         {% if section.settings.subheading_2 != blank %}
-          <p class="hero-one__subheading-2">{{ section.settings.subheading_2 }}</p>
+          <p class="hero-one__subheading-2 mobile-only">{{ section.settings.subheading_2 }}</p>
         {% endif %}
         
         {% if section.settings.button_label != blank %}
