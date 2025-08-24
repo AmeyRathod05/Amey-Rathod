@@ -1,14 +1,18 @@
-
 document.addEventListener('DOMContentLoaded', function() {
 
   const popup = document.getElementById('minimal-product-popup');
+  const popupOverlay = document.querySelector('.minimal-popup-overlay');
+  const closeButton = popup.querySelector('.minimal-popup-close');
+  const popupContent = document.querySelector('.minimal-popup-content');
+  const cartNotification = document.getElementById('cart-notification');
+  const cartIcon = document.getElementById('cart-icon');
+  const cartCount = document.querySelector('.cart-count');
   const popupImage = document.getElementById('popup-product-image');
   const popupTitle = document.getElementById('popup-product-title');
   const popupPrice = document.getElementById('popup-product-price');
   const popupDescription = document.getElementById('popup-product-description');
   const popupForm = document.getElementById('popup-add-to-cart-form');
   const variantSelectors = document.getElementById('popup-variant-selectors');
-  const closeButton = popup.querySelector('.minimal-popup-close');
   
   let currentProduct = null;
 
@@ -32,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 200);
   }
   
-    closeButton.addEventListener('click', function(e) {
+  closeButton.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
     hidePopup();
@@ -45,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-    popup.addEventListener('click', function(e) {
+  popup.addEventListener('click', function(e) {
     if (e.target === popup) {
       hidePopup();
     }
@@ -73,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function updatePopupContent(product) {
     popupTitle.textContent = product.title;
-    popupPrice.textContent = formatMoney(product.price);
+    popupPrice.textContent = `$${(product.price / 100).toFixed(2)}`;
     
     if (product.images && product.images.length > 0) {
       const imageUrl = product.images[0].replace(/\.(jpg|jpeg|png|webp)/, 
@@ -87,103 +91,93 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     if (product.variants && product.variants.length > 0) {
-      updateVariants(product);
+      document.getElementById('selected-variant-id').value = product.variants[0].id;
     }
   }
   
-  function updateVariants(product) {
-    variantSelectors.innerHTML = '';
-    
-    const options = {};
-    
-    product.options.forEach(option => {
-      options[option.name] = {
-        name: option.name,
-        values: [...new Set(product.variants.map(v => v.option1))].filter(Boolean)
-      };
-    });
-    
-    Object.values(options).forEach(option => {
-      if (option.name === 'Title' && option.values[0] === 'Default Title') {
-        return;
-      }
-      
-      const optionContainer = document.createElement('div');
-      optionContainer.className = 'variant-option';
-      optionContainer.innerHTML = `
-        <h4>${option.name}</h4>
-        <select class="variant-selector" data-option="${option.name}">
-          ${option.values.map(value => 
-            `<option value="${value}">${value}</option>`
-          ).join('')}
-        </select>
-      `;
-      
-      variantSelectors.appendChild(optionContainer);
-    });
-    
-    variantSelectors.querySelectorAll('.variant-selector').forEach(select => {
-      select.addEventListener('change', updateSelectedVariant);
-    });
-    
-    updateSelectedVariant();
-  }
   
-  function updateSelectedVariant() {
-    if (!currentProduct || !currentProduct.variants) return;
-    
-    const selectedOptions = {};
-    
-    
-    variantSelectors.querySelectorAll('.variant-selector').forEach(select => {
-      const optionName = select.dataset.option;
-      selectedOptions[optionName] = select.value;
-    });
-    
-    const selectedVariant = currentProduct.variants.find(variant => {
-      return Object.entries(selectedOptions).every(([key, value]) => {
-        return variant[key.toLowerCase()] === value;
+  function updateCartCount() {
+    cartIcon.style.display = 'flex';
+    fetch('/cart.js')
+      .then(response => response.json())
+      .then(cart => {
+        const itemCount = cart.item_count;
+        cartCount.textContent = itemCount;
       });
-    });
-    
-    if (selectedVariant) {
-      popupPrice.textContent = formatMoney(selectedVariant.price);
-      
-      if (selectedVariant.featured_image) {
-        popupImage.src = selectedVariant.featured_image.src.replace(/\.(jpg|jpeg|png|webp)/, 
-          (match, ext) => `_600x.${ext}`);
-      }
-      
-      const variantIdInput = document.getElementById('selected-variant-id');
-      if (variantIdInput) {
-        variantIdInput.value = selectedVariant.id;
-      } else {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'id';
-        input.id = 'selected-variant-id';
-        input.value = selectedVariant.id;
-        popupForm.appendChild(input);
-      }
-    }
   }
   
-  function formatMoney(cents, format = '${{amount}}') {
-    if (typeof cents === 'string') {
-      cents = cents.replace(/\.\d+/, '');
+  function showNotification() {
+    const productTitle = document.getElementById('popup-product-title').textContent;
+    const notificationTitle = document.querySelector('.cart-notification .product-title');
+    
+    if (productTitle && notificationTitle) {
+      const truncatedTitle = productTitle.length > 20 
+        ? productTitle.substring(0, 20) + '...' 
+        : productTitle;
+      notificationTitle.textContent = truncatedTitle;
     }
     
-    const value = (cents / 100).toFixed(2);
-    return format.replace(/\{\{\s*(\w+)\s*\}\}/g, (match, key) => {
-      switch (key) {
-        case 'amount': return value;
-        case 'amount_no_decimals': return Math.floor(cents / 100);
-        case 'amount_with_comma_separator': return value.replace(/\./g, ',');
-        case 'amount_no_decimals_with_comma_separator': return Math.floor(cents / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        default: return '';
+    cartNotification.style.display = 'flex';
+    cartNotification.style.opacity = '0';
+    cartNotification.style.transform = 'translateX(20px)';
+    
+    
+    setTimeout(() => {
+      cartNotification.style.opacity = '1';
+      cartNotification.style.transform = 'translateX(0)';
+      
+      
+      setTimeout(() => {
+        cartNotification.style.opacity = '0';
+        cartNotification.style.transform = 'translateX(20px)';
+        
+        setTimeout(() => {
+          cartNotification.style.display = 'none';
+        }, 300);
+      }, 3000);
+    }, 10);
+    
+    updateCartCount();
+  }
+  
+  if (popupForm) {
+    popupForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const variantId = document.getElementById('selected-variant-id').value;
+      if (!variantId) return;
+      
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            items: [{
+              id: variantId,
+              quantity: 1
+            }]
+          })
+        });
+        
+        if (response.ok) {
+          showNotification();
+          hidePopup();
+        }
+      } catch (error) {
+        console.error('Error:', error);
       }
     });
   }
+  
+  if (cartIcon) {
+    cartIcon.addEventListener('click', function() {
+      window.location.href = '/cart';
+    });
+  }
+  
+  updateCartCount();
   
   document.addEventListener('click', function(e) {
     const quickViewBtn = e.target.closest('.quick-view') || e.target.closest('.quick-view-icon');
@@ -197,32 +191,4 @@ document.addEventListener('DOMContentLoaded', function() {
       loadProductData(productHandle);
     }
   });
-  
-  if (popupForm) {
-    popupForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const variantId = document.getElementById('selected-variant-id')?.value;
-      
-      if (variantId) {
-        console.log('Adding to cart:', variantId);
-        
-        const formData = new FormData();
-        formData.append('id', variantId);
-        formData.append('quantity', 1);
-        
-        fetch('/cart/add.js', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Added to cart:', data);
-          hidePopup();
-        })
-        .catch(error => {
-          console.error('Error adding to cart:', error);
-        });
-      }
-    });
-  }
 });

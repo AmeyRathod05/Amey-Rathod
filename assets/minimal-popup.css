@@ -1,4 +1,3 @@
-
 .minimal-product-popup {
   position: fixed;
   top: 0;
@@ -433,4 +432,124 @@
   .minimal-popup.active {
     transform: none !important;
   }
+}
+
+/* Cart Notification */
+.cart-notification {
+  position: fixed;
+  top: 30px;
+  right: 90px;
+  background-color: #000;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  max-width: 300px;
+  box-sizing: border-box;
+}
+
+.cart-notification.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.cart-notification .checkmark {
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.cart-notification .notification-message {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 14px;
+}
+
+.cart-notification .product-title {
+  font-weight: 600;
+  margin: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.cart-notification .cart-icon {
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.15);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.cart-notification .cart-icon svg {
+  width: 16px;
+  height: 16px;
+  color: #fff;
+}
+
+/* Cart Icon */
+.cart-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #000;
+  color: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cart-icon:hover {
+  transform: scale(1.05);
+  background-color: #333;
+}
+
+.cart-icon.visible {
+  right: 20px;
+}
+
+.cart-icon svg {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+
+.cart-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
 }
