@@ -111,7 +111,7 @@
 
 
 .hero-one__heading {
-  font-size:4rem;
+  font-size:10rem;
   font-weight: 700;
   margin: 0;
   line-height: 1.2;
@@ -120,7 +120,7 @@
 }
 
 .hero-one__subheading-1 {
-  font-size: 2rem;
+  font-size: 3rem;
   margin-bottom: 0px !important;
   font-weight: 500;
   color: black;
@@ -159,6 +159,9 @@
 /* Default (Web) Styles */
 .hero-one__content-wrapper {
   position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .hero-one__button {
