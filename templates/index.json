@@ -40,6 +40,7 @@
     },
     "hero_one_AE46Ga": {
       "type": "hero-one",
+      "custom_css": [],
       "name": "Hero One",
       "settings": {
         "banner_image": "shopify://shop_images/Frame_2.png",
